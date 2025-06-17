@@ -1,7 +1,7 @@
-# Script PowerShell: Diagnóstico del PC y exportación en formato TOML
+# Script PowerShell: DiagnÃ³stico del PC y exportaciÃ³n en formato TOML
 
 # Obtener fecha y nombre del equipo
-$fecha = Get-Date -Format "yyyyMMdd"
+$fecha = Get-Date -Format "yyyyMMddhh"
 $nombrePC = $env:COMPUTERNAME
 
 # Intentar hacer ping al Gateway
@@ -13,7 +13,7 @@ if ($ping) {
     $estado = "Fallo"
 }
 
-# Obtener información del sistema
+# Obtener informaciÃ³n del sistema
 $so = Get-CimInstance Win32_OperatingSystem
 $ipInfo = Get-NetIPAddress -AddressFamily IPv4 | Where-Object {$_.PrefixOrigin -eq "Dhcp" -or $_.PrefixOrigin -eq "Manual"}
 $cpu = Get-CimInstance Win32_Processor
@@ -53,3 +53,6 @@ $contenido | Out-File -FilePath $archivo -Encoding utf8
 # scp $archivo usuario@IP:/ruta/de/destino/
 
 Write-Output "Archivo generado: $archivo"
+$usuario = [Environment]::UserName
+$servidor = localhost
+scp $archivo $usuario@$servidor:LAB6/
