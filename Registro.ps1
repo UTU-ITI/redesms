@@ -1,5 +1,5 @@
 # Script PowerShell: Diagnóstico del PC y exportación en formato TOML
-
+#agrear lectura de variables de archivo de configuracion .env
 # Obtener fecha y nombre del equipo
 $fecha = Get-Date -Format "yyyyMMddhh"
 $nombrePC = $env:COMPUTERNAME
@@ -50,9 +50,9 @@ disco_c_gb = $discoTotal
 $contenido | Out-File -FilePath $archivo -Encoding utf8
 
 # (Opcional) Subir con SCP - Ajustar con tus datos reales
-# scp $archivo usuario@IP:/ruta/de/destino/
+# scp $archivo tc1@IP:$CARPETA-REGISTROS
 
 Write-Output "Archivo generado: $archivo"
 $usuario = [Environment]::UserName
 $servidor = localhost
-scp $archivo $usuario@$servidor:LAB6/
+scp $archivo $usuario@$servidor:$laboratorio
