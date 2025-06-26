@@ -1,5 +1,6 @@
 # Script PowerShell: Diagnóstico del PC y exportación en formato TOML
 #agrear lectura de variables de archivo de configuracion .env
+#TODO: Crear carpeta de registros en linux
 # Obtener fecha y nombre del equipo
 $fecha = Get-Date -Format "yyyyMMddhh"
 $nombrePC = $env:COMPUTERNAME
@@ -55,4 +56,4 @@ $contenido | Out-File -FilePath $archivo -Encoding utf8
 Write-Output "Archivo generado: $archivo"
 $usuario = [Environment]::UserName
 $servidor = localhost
-scp $archivo $usuario@$servidor:$laboratorio
+scp $archivo $usuario@$servidor:$carpeta-registro
