@@ -71,5 +71,5 @@ Realizar dos procedimientos de respaldo de información en entornos Windows y Li
 
 ---
 
-## 📅 Fecha de entrega: _[completar por el docente]_
+## 📅 Fecha de entrega: _[3/7/2025]_
 
