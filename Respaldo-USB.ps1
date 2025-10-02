@@ -1,0 +1,55 @@
+# Cargar variables desde archivo .env
+$envFile = ".env"
+Get-Content $envFile | ForEach-Object {
+    if ($_ -match "^\s*([^#][^=]+)=(.*)$") {
+        $key, $value = $matches[1].Trim(), $matches[2].Trim()
+        Set-Variable -Name $key -Value $value -Scope Global
+    }
+}
+
+# Variables requeridas en .env:
+# DB_HOST=localhost
+# DB_USER=admin
+# DB_PASS=secreta123
+# DB_NAME=nombre_db
+
+# 1. Solicitar al usuario que inserte el dispositivo extraíble
+Write-Host "Por favor, inserte el dispositivo USB para guardar el respaldo."
+Start-Sleep -Seconds 5
+
+# 2. Detectar la última unidad extraíble
+$usbDrive = Get-WmiObject Win32_LogicalDisk | Where-Object {
+    $_.DriveType -eq 2
+} | Sort-Object VolumeName | Select-Object -Last 1
+
+if (-not $usbDrive) {
+    Write-Error "No se detectó ningún dispositivo USB. Cancelando operación."
+    exit
+}
+
+# 3. Crear nombre de archivo de respaldo
+$fecha = Get-Date -Format "yyyyMMdd_HHmm"
+$archivoBackup = "$($DB_NAME)_backup_$fecha.sql"
+$rutaDestino = Join-Path $usbDrive.DeviceID $archivoBackup
+
+# 4. Ejecutar respaldo (ejemplo usando MySQL, adaptar si es PostgreSQL u otro)
+$comandoDump = "mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME > `"$rutaDestino`""
+cmd /c $comandoDump
+
+# 5. Crear documento de registro de respaldo
+$protocoloTxt = @"
+[PROTOCOLO DE RESPALDO]
+Fecha: $(Get-Date)
+Usuario: $env:USERNAME
+Base de Datos: $DB_NAME
+Destino: $usbDrive.DeviceID
+Archivo: $archivoBackup
+
+Este respaldo fue ejecutado manualmente por el responsable designado.
+La unidad debe ser retirada, firmada, y almacenada en la oficina de asistentes.
+"@
+$protocoloPath = Join-Path $usbDrive.DeviceID "registro_respaldo_$fecha.txt"
+$protocoloTxt | Out-File -FilePath $protocoloPath -Encoding utf8
+
+Write-Host "Respaldo completado con éxito."
+Write-Host "Por favor, retire el dispositivo y entréguelo a la oficina de asistentes."
