@@ -1,0 +1,43 @@
+﻿# 🧪 Práctica: Diagnóstico y Exportación de Información del PC en Formato TOML
+
+## 🎯 Objetivo
+Realizar un diagnóstico de red y exportar información básica del sistema en formato `.toml`, incluyendo:
+
+- Nombre del equipo
+- Sistema Operativo
+- Configuración de red
+- CPU
+- Memoria RAM
+- Espacio en disco
+
+El archivo debe guardarse con el siguiente formato de nombre:
+
+fecha-nombrepc-resultado.toml
+
+markdown
+Copy
+Edit
+
+---
+
+## 📄 Ejemplo del archivo TOML generado
+
+```toml
+[info_general]
+fecha = "2025-06-12"
+nombre_pc = "PC-LAB01"
+estado_conexion = "Exito"
+
+[sistema_operativo]
+nombre = "Microsoft Windows 10 Pro"
+version = "10.0.19045"
+
+[red]
+ip = "192.168.1.101"
+mascara = "255.255.255.0"
+default_gateway = "192.168.1.1"
+
+[hardware]
+cpu = "Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz"
+ram_gb = 8
+disco_c_gb = 256
