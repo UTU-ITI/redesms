@@ -1,0 +1,2 @@
+# Comando de ejemplo para asignar una IP estática
+New-NetIPAddress -InterfaceIndex <ifIndex> -IPAddress 192.168.1.100 -PrefixLength 24
